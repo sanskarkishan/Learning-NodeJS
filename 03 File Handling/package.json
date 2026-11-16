@@ -1,0 +1,12 @@
+{
+  "name": "03-file-handling",
+  "version": "1.0.0",
+  "description": "Learning File Handling in Node",
+  "main": "App.js",
+  "scripts": {
+    "test": "jest",
+    "start":"node App.js"
+  },
+  "author": "Sanskar",
+  "license": "ISC"
+}

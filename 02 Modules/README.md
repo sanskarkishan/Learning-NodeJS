@@ -140,6 +140,41 @@ console.log(add(5, 3));
 console.log(subtract(5, 3));
 ```
 
+### Relative paths and package names in `require()`
+
+These statements look similar, but Node.js resolves their module specifiers differently. They are alternatives, not lines to use together:
+
+```javascript
+// Load a local file or folder
+const math = require("./math");
+```
+
+```javascript
+// Load a built-in module or an installed package
+const math = require("math");
+```
+
+Use `require("./math")` to load a file or folder relative to the file containing the `require()` call. The `./` means “from the current directory.” For example, if `App.js` and `math.js` are in the same folder, `require("./math")` loads `math.js`. You can also write the extension explicitly as `require("./math.js")`.
+
+Use a bare name such as `require("math")` to load a built-in Node.js module or find a package by that name. Since `math` is not a built-in module, Node.js looks for a package named `math` in `node_modules` directories, starting near the requiring file and then checking parent directories. The package can specify its entry file in its `package.json`; otherwise, Node.js uses its default package entry resolution.
+
+| `require()` form | What it refers to | Example |
+| --- | --- | --- |
+| `require("./math")` | A relative file or folder | A sibling `math.js` file |
+| `require("../math")` | A relative file or folder one directory up | `math.js` in the parent directory |
+| `require("math")` | A built-in module or an installed package | A package in `node_modules/math` |
+
+If `math.js` is beside `App.js`, this is the correct form:
+
+```javascript
+// App.js
+const math = require("./math");
+
+console.log(math.add(5, 3));
+```
+
+Writing `require("math")` does not mean “load `math.js` from this folder.” If no built-in module or matching package can be found, Node.js throws a `MODULE_NOT_FOUND` error. Install a package before requiring it by name, or use a relative path for your own files.
+
 ## ES Modules
 
 ES Modules use `export` and `import`. In Node.js, enable this syntax by setting `"type": "module"` in `package.json`, or use the `.mjs` file extension.
