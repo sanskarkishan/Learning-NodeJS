@@ -58,6 +58,31 @@ Query strings are part of the URL and can appear in browser history, logs, and o
 
 Some URLs can include user information before the host, such as `https://user:password@example.com/`. Avoid putting credentials in URLs: they can be exposed in logs, history, and other places.
 
+## HTTP methods
+
+An **HTTP method** tells the server what action the client wants to perform on the resource identified by the URL. It is sent with the request, for example:
+
+```http
+GET /products/42 HTTP/1.1
+Host: shop.example.com
+```
+
+Common methods and their usual meanings:
+
+| Method | Typical use | Safe? | Idempotent? |
+| --- | --- | --- | --- |
+| `GET` | Retrieve a resource or collection. Usually, send filters and search terms in the query string. | Yes | Yes |
+| `HEAD` | Like `GET`, but ask for the response headers without the response body. | Yes | Yes |
+| `POST` | Submit data for the server to process; commonly used to create a resource or trigger an action. | No | No |
+| `PUT` | Create or replace the resource at the specified URL with the supplied representation. | No | Yes |
+| `PATCH` | Apply a partial change to a resource. | No | Not necessarily |
+| `DELETE` | Delete the resource at the specified URL. | No | Yes |
+| `OPTIONS` | Ask which communication options or methods are supported. Browsers also use it for CORS preflight requests. | Yes | Yes |
+
+**Safe** means the method is intended to read rather than change the resource. **Idempotent** means repeating the same request has the same intended effect as sending it once; the response (such as a status code) can still differ. These properties describe the method's intended semantics, not a guarantee about every server implementation.
+
+As a developer, use `GET` for reads and do not use it to change server state. Send data that creates or updates resources in the request body, commonly with `POST`, `PUT`, or `PATCH`; use `DELETE` for removal. `PUT` represents replacement, while `PATCH` represents a partial update. The server decides which methods each route supports, and unsupported methods commonly receive `405 Method Not Allowed`.
+
 ## HTTP and HTTPS
 
 | Feature | HTTP | HTTPS |
